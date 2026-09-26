@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { HashRouter, useNavigate, useLocation } from "react-router";
 import {
   X,
   ChevronLeft,
@@ -15,11 +16,11 @@ type Page = "home" | "motion" | "illustration" | "gameart";
 const ACCENT = "#1aaa98";
 
 // ── Swap these URLs with your own links ───────────────────────────────────────
-const INTRO_REEL_URL = "https://lnhlam.art/video/Demo-Reel.mp4"; // landing page intro reel
+const INTRO_REEL_URL = "https://lnhlam.github.io/video/Demo-Reel.mp4"; // landing page intro reel
 const MOTION_REEL_URL =
-  "https://lnhlam.art/video/Motion-Graphics-Reel-2026.mp4"; // motion page showreel
-const ABOUT_BG_URL = "https://lnhlam.art/images/slide1.jpg"; // About panel background image — paste a URL or "/your-image.png" from public/
-const LOGO_URL = "https://lnhlam.art/images/LogoName.png"; // Top bar logo image — paste a URL or "/your-logo.png" from public/
+  "https://lnhlam.github.io/video/Motion-Graphics-Reel-2026.mp4"; // motion page showreel
+const ABOUT_BG_URL = "https://lnhlam.github.io/images/slide1.jpg"; // About panel background image — paste a URL or "/your-image.png" from public/
+const LOGO_URL = "https://lnhlam.github.io/images/LogoName.png"; // Top bar logo image — paste a URL or "/your-logo.png" from public/
 
 // ── Contact links ─────────────────────────────────────────────────────────────
 const CONTACT_EMAIL = "lnhlam@ymail.com";
@@ -32,6 +33,33 @@ const CONTACT_LINKEDIN = "https://www.linkedin.com/in/lnhlam/";
 const MOTION_PROJECTS = [
   {
     id: 1,
+    title: "New Money Habit",
+    client: "Quicken",
+    year: 2026,
+    aspect: "16/9",
+    description:
+      "Following studies of trending design schemes, this creative aimed to be a modern, eye-catching visual of the client's product overlayed on a 3D phone to showcase the app and its features. \n\n Agency: Monks \n\n Role: Graphic Designer, Motion Designer",
+    thumb:
+      "https://lnhlam.github.io/video/Motion-Design/Quicken_1068_New Money Habit_PFM_1920x1080.mp4",
+    video:
+      "https://lnhlam.github.io/video/Motion-Design/Quicken_1068_New Money Habit_PFM_1920x1080.mp4",
+  },
+  {
+    id: 2,
+    title: "Useful",
+    client: "Interactive Brokers",
+    year: 2026,
+    aspect: "4/5",
+    description:
+      "A campaign to showcase the client's product and their newly built integration with AI.\n\n Agency: Monks \n\n Role: Motion Designer",
+    thumb:
+      "https://lnhlam.github.io/video/Motion-Design/032_IBKR_Useful_1080x1350_Hook2_15s.mp4",
+    video:
+      "https://lnhlam.github.io/video/Motion-Design/032_IBKR_Useful_1080x1350_Hook2_15s.mp4",
+  },
+
+  {
+    id: 3,
     title: "Smash The Diet Industry Retargeting",
     client: "Midi",
     year: 2026,
@@ -39,12 +67,12 @@ const MOTION_PROJECTS = [
     description:
       "A retargeting campaign for Midi, the virtual care clinic created by specialists in perimenopause and menopause, was based around breaking the expectations of the diet industry. This specific creative was marked as a top performing creative among the campaign.\n\n Agency: Monks \n\n Role: Motion Designer",
     thumb:
-      "https://lnhlam.art/video/Motion-Design/Midi_SmashTheDietIndustry_1080X1350.mp4",
+      "https://lnhlam.github.io/video/Motion-Design/Midi_SmashTheDietIndustry_1080X1350.mp4",
     video:
-      "https://lnhlam.art/video/Motion-Design/Midi_SmashTheDietIndustry_1080X1350.mp4",
+      "https://lnhlam.github.io/video/Motion-Design/Midi_SmashTheDietIndustry_1080X1350.mp4",
   },
   {
-    id: 2,
+    id: 4,
     title: "HRT 1006.2",
     client: "Midi",
     year: 2026,
@@ -52,119 +80,119 @@ const MOTION_PROJECTS = [
     description:
       "In part of a rebranding of the client, Midi, the virtual care clinic created by specialists in perimenopause and menopause. The client requested for punchy, hard-hitting pacing to emphasize their updated branding. \n\n Agency: Monks \n\n Role: Motion Designer",
     thumb:
-      "https://lnhlam.art/video/Motion-Design/Midi_1053_HRT 1006-2_1080x1350.mp4",
+      "https://lnhlam.github.io/video/Motion-Design/Midi_1053_HRT 1006-2_1080x1350.mp4",
     video:
-      "https://lnhlam.art/video/Motion-Design/Midi_1053_HRT 1006-2_1080x1350.mp4",
+      "https://lnhlam.github.io/video/Motion-Design/Midi_1053_HRT 1006-2_1080x1350.mp4",
   },
   {
-    id: 3,
+    id: 5,
     title: "Magnifying Glass",
     client: "Rula",
     year: 2026,
     aspect: "4/5",
     description:
       "A high performing creative for the client Rula, an online mental health platform. The main focus was the magnifying glass that needed to pull in the attention, feel real, and have a satisfying effect. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/RU_1051_Magnifying Glass.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/RU_1051_Magnifying Glass.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/RU_1051_Magnifying Glass.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/RU_1051_Magnifying Glass.mp4",
   },
   {
-    id: 4,
+    id: 6,
     title: "Testimonial Lifestyle",
     client: "QuillBot",
     year: 2026,
     aspect: "16/9",
     description:
       "A quickly paced, high tempo, testimonial showcase for Quillbot, a multilingual AI writing assistant extension. \n\n Agency: Monks \n\n Role: Motion Designer ",
-    thumb: "https://lnhlam.art/video/Motion-Design/QuillBot-Testimonial-Lifestyle-1920x1080.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/QuillBot-Testimonial-Lifestyle-1920x1080.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/QuillBot-Testimonial-Lifestyle-1920x1080.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/QuillBot-Testimonial-Lifestyle-1920x1080.mp4",
   },
   {
-    id: 5,
+    id: 7,
     title: "Effective Resource Management",
     client: "Planview",
     year: 2026,
     aspect: "4/5",
     description:
       "An illustration heavy looping animation for Planview, the platform for driving enterprise execution and outcomes. This creative is intended as a seamlessly looping gif and required simple UI motion and subtle puppeting. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Planview-Effective-Resource-Management.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Planview-Effective-Resource-Management.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Planview-Effective-Resource-Management.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Planview-Effective-Resource-Management.mp4",
   },
   {
-    id: 6,
+    id: 8,
     title: "Holiday NMO",
     client: "Chime",
     year: 2025,
     aspect: "4/5",
     description:
       "Part of a seasonal promotion for the fintech company, Chime. To follow the holiday design, the snowglobe features a lo-fi snowfall effect and showcasing a gentle rocking Chime credit card as the focal point. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Chime_1139_Holiday NMO_1080x1350.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Chime_1139_Holiday NMO_1080x1350.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Chime_1139_Holiday NMO_1080x1350.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Chime_1139_Holiday NMO_1080x1350.mp4",
   },
   {
-    id: 7,
+    id: 9,
     title: "Never Start Over",
     client: "QuillBot",
     year: 2026,
     aspect: "16/9",
     description:
       "A UI/UX interaction heavy showcase for Quillbot, a multilingual AI writing assistant extension. The interactions needed to feel smooth, accurate to the product, but with some added flair to engage the viewer into the user experience. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/QuillBot_1036_Never Start Over_1920x1080 v2.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/QuillBot_1036_Never Start Over_1920x1080 v2.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/QuillBot_1036_Never Start Over_1920x1080 v2.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/QuillBot_1036_Never Start Over_1920x1080 v2.mp4",
   },
   {
-    id: 8,
+    id: 10,
     title: "Chime Prime",
     client: "Chime",
     year: 2026,
     aspect: "9/16",
     description:
       "An upbeat UI showcase of Chime alongside several promotional offers. The animation was set up as an evergreen template and 6 different copies at 4 different resizes were provided to the client. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Chime-Prime-1080x1920.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Chime-Prime-1080x1920.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Chime-Prime-1080x1920.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Chime-Prime-1080x1920.mp4",
   },
   {
-    id: 9,
+    id: 11,
     title: "The Flywheel Quadrant",
     client: "Quicken",
     year: 2026,
     aspect: "9/16",
     description:
       "A multi-level creative series for Quicken, a personal finance management application, I brought from 2 static versions and later combined to one animated version. The client preference for stock imagery and video lands under an older demographic with high-life imagery.\n\n Agency: Monks \n\n Role: Graphic Designer, Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Quicken_1051_The Flywheel Quadrant_1080x1920_A.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Quicken_1051_The Flywheel Quadrant_1080x1920_A.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Quicken_1051_The Flywheel Quadrant_1080x1920_A.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Quicken_1051_The Flywheel Quadrant_1080x1920_A.mp4",
   },
   {
-    id: 10,
+    id: 12,
     title: "Guide to Scent Stacking 101",
     client: "Sol De Janeiro",
     year: 2025,
     aspect: "9/16",
     description:
       "A simple step-by-step video showcase to provide direction for users of the product by Sol de Janeiro, an American skincare and fragrance brand inspired by Brazilian beach culture. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Sol-Guide-To-Scent-Stacking-101-Collages-1080x1920.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Sol-Guide-To-Scent-Stacking-101-Collages-1080x1920.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Sol-Guide-To-Scent-Stacking-101-Collages-1080x1920.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Sol-Guide-To-Scent-Stacking-101-Collages-1080x1920.mp4",
   },
   {
-    id: 11,
+    id: 13,
     title: "Kinetic Testimonial UGC",
     client: "Quicken",
     year: 2021,
     aspect: "16/9",
     description:
       "A UGC concept brought from design, to editing, to animation for Quicken, a personal finance management application. The creative features overall design, cutting and editing the UGC footage, to animating graphics, UI, and kinetic typography. \n\n Agency: Monks \n\n Role: Graphic Designer, Video Editor, Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Quicken_1039_Kinetic Testimonial UGC_Hook1_1920x1080.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Quicken_1039_Kinetic Testimonial UGC_Hook1_1920x1080.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Quicken_1039_Kinetic Testimonial UGC_Hook1_1920x1080.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Quicken_1039_Kinetic Testimonial UGC_Hook1_1920x1080.mp4",
   },
   {
-    id: 12,
+    id: 14,
     title: "Gen Z Phone",
     client: "Chime",
     year: 2026,
     aspect: "4/5",
     description:
       "A creative brought from a pass-off to finishing for the fintech, Chime. The AI-generated background was provided to me and needed additional design edits as well as motion tracking and finishing. \n\n Agency: Monks \n\n Role: Motion Designer",
-    thumb: "https://lnhlam.art/video/Motion-Design/Chime_1176_Evergreen-GenZPhone_1080x1350.mp4",
-    video: "https://lnhlam.art/video/Motion-Design/Chime_1176_Evergreen-GenZPhone_1080x1350.mp4",
+    thumb: "https://lnhlam.github.io/video/Motion-Design/Chime_1176_Evergreen-GenZPhone_1080x1350.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Design/Chime_1176_Evergreen-GenZPhone_1080x1350.mp4",
   },
 ];
 
@@ -173,7 +201,7 @@ const ILLUSTRATION_ITEMS = [
     id: 1,
     title: "Smol Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig.png",
     w: 320,
     description:
       "A species concept sheet of the main inhabitants in the universe of the fractal-world farming/life simulator game, Smolbound. The project's creative direction fell under a hybrid of anime/isekai-inspired world building while maintaining the core characteristics of the original IP/NFT project, Smolverse.",
@@ -182,7 +210,7 @@ const ILLUSTRATION_ITEMS = [
     id: 2,
     title: "Sky Whale Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig1.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig1.png",
     w: 270,
     description:
       "Character/environment concept design of the Sky Whale for the fractal-world farming/life simulator game, Smolbound.",
@@ -191,7 +219,7 @@ const ILLUSTRATION_ITEMS = [
     id: 3,
     title: "Smolbound Buildings Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig9.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig9.png",
     w: 300,
     description:
       "Buildings concept sheet for the 'village on the back of a sky whale' for the fractal-world farming/life simulator game, Smolbound.",
@@ -200,7 +228,7 @@ const ILLUSTRATION_ITEMS = [
     id: 4,
     title: "Omni-Tool Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig2.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig2.png",
     w: 400,
     description:
       "Prop concept sheet for the essential tool in the fractal-world farming/life simulator game, Smolbound.",
@@ -209,7 +237,7 @@ const ILLUSTRATION_ITEMS = [
     id: 5,
     title: "Alice Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig3.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig3.png",
     w: 310,
     description:
       "Character concept sheet for an NPC character designed as a multi-dimensional being inspired by the original Alice of Alice in Wonderland. Designed for fractal-world farming/life simulator game, Smolbound.",
@@ -218,7 +246,7 @@ const ILLUSTRATION_ITEMS = [
     id: 6,
     title: "Cheshire Concept Sheet",
     year: 2023,
-    url: "https://lnhlam.art/images/portfolio/portfolio4/pbig4.png",
+    url: "https://lnhlam.github.io/images/portfolio/portfolio4/pbig4.png",
     w: 360,
     description:
       "Character concept sheet for an NPC character inspired by a humanized Cheshire cat in the fractal world farming/life simulator game, Smolbound.",
@@ -280,16 +308,16 @@ const GAME_PROJECTS = [
     subtitle: "Art Direction, Rigging & Animation, Shadergraph | Unity, Spine, Photoshop",
     year: 2024,
     coverImage:
-      "https://lnhlam.art/images/pthumbnail4.jpg",
+      "https://lnhlam.github.io/images/pthumbnail4.jpg",
     characterArt:
-      "https://lnhlam.art/images/charA.png",
+      "https://lnhlam.github.io/images/charA.png",
     images: [
-      "https://lnhlam.art/video/Smolbound.mp4",
-      "https://lnhlam.art/images/portfolio/portfolio4/SC1.png",
-      "https://lnhlam.art/images/portfolio/portfolio4/SC2.png",
-      "https://lnhlam.art/images/portfolio/portfolio4/SC3.png",
-      "https://lnhlam.art/images/portfolio/portfolio4/SC4.png",
-      "https://lnhlam.art/images/portfolio/portfolio4/SC5.png",
+      "https://lnhlam.github.io/video/Smolbound.mp4",
+      "https://lnhlam.github.io/images/portfolio/portfolio4/SC1.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio4/SC2.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio4/SC3.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio4/SC4.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio4/SC5.png",
     ],
     description:
       "Smolbound is a bright and colorful game based off of the original IP known as Smolverse. The core idea of the game is a blend of cozy sandbox, colony management, and strategic exploration, while bringing in a twist of whacky farming-based combat. The player lives on the back of a Sky Whale which travels throughout an endless void across floating islands in the galaxy where they meet unique characters and gain more villagers on their journey. The project began as a title under the crypto-game publishing company known as Treasure. As the main point of the art team, I was in charge of establishing the initial art direction and visual tone, directly contributing to securing $6M in project funding. Throughout the project, core duties involved setting the initial unity-art pipeline alongside the engineering team, leading a small team of artists to maintain visual consistency through art and UI, while maintaining and directing all other visual needs for the studio. \n\n Role: Art Lead with duties in Art Direction, Character Art, Environment Art, Character Rigging and Animation, Technical Art and VFX",
@@ -300,28 +328,28 @@ const GAME_PROJECTS = [
     subtitle: "2D Rigging & Animation, Art Direction, Shadergraph | Unity, Spine, Animate",
     year: 2023,
     coverImage:
-      "https://lnhlam.art/images/pthumbnail6.jpg",
+      "https://lnhlam.github.io/images/pthumbnail6.jpg",
     characterArt:
-      "https://lnhlam.art/images/charB.png",
+      "https://lnhlam.github.io/images/charB.png",
     images: [
       "https://www.youtube.com/watch?v=np3hv-rIRTU",
       "https://www.youtube.com/watch?v=3VcuS8IdbNA",
-      "https://lnhlam.art/video/UU-Cinematic.mp4",
-      "https://lnhlam.art/images/portfolio/portfolio6/pbig6.png",
-      "https://lnhlam.art/images/portfolio/portfolio6/pbig64.png",
-      "https://lnhlam.art/images/portfolio/portfolio6/pbig65.png",
-      "https://lnhlam.art/images/portfolio/portfolio6/Boogie-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Deckster-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Angel-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Rose-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Boogie-Action.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Deckster-Action.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Angel-Action.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Rose-Action.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Exoskeleton-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/Lion-Walk.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/pbig62.gif",
-      "https://lnhlam.art/images/portfolio/portfolio6/pbig63.png",
+      "https://lnhlam.github.io/video/UU-Cinematic.mp4",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/pbig6.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/pbig64.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/pbig65.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Boogie-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Deckster-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Angel-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Rose-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Boogie-Action.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Deckster-Action.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Angel-Action.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Rose-Action.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Exoskeleton-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/Lion-Walk.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/pbig62.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio6/pbig63.png",
     ],
     description:
       "Underling Uprising is a 2D arcade, saturday morning-inspired Beat 'em up game about 4 failed science experiments rising up to take down their mad scientist creator, Dr. Baldrick. This project is set to release soon and was funded on Kickstarter raising over $15,000. The character bases are created in Adobe Animate, animated in Spine, and character attacks and actions are purely frame-by-frame animation. \n\n Role: Art Direction, Animation, Technical Art, Character Art, Background Art, Marketing Art, Graphic Design, Cinematic Animation",
@@ -332,17 +360,17 @@ const GAME_PROJECTS = [
     subtitle: "2D Rigging & Animation | Unity, Spine, Tiled",
     year: 2022,
     coverImage:
-      "https://lnhlam.art/images/pthumbnail7.jpg",
+      "https://lnhlam.github.io/images/pthumbnail7.jpg",
     characterArt:
-      "https://lnhlam.art/images/charD.png",
+      "https://lnhlam.github.io/images/charD.png",
     images: [
-      "https://lnhlam.art/video/Kippo.mp4",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig1.png",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig2.png",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig3.png",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig4.png",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig5.png",
-      "https://lnhlam.art/images/portfolio/portfolio7/pbig6.png",
+      "https://lnhlam.github.io/video/Kippo.mp4",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig1.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig2.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig3.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig4.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig5.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio7/pbig6.png",
     ],
     description:
       "The Kippoverse is a 2D mobile metaverse extension of the dating app known as Kippo. Originally the Dating App for Gamers, Kippo has built a social world within the app where users can meet, voice chat, and connect. All in-game assets are vector based illustrations made in Adobe Illustrator, animated in either After Effects or Spine Esoteric, and implemented in Unity.\n\nRole: 2D Artist, Spine and Lottie Animator, Motion Graphics",
@@ -353,15 +381,15 @@ const GAME_PROJECTS = [
     subtitle: "Pixel Art & Animation | Unity, Asesprite",
     year: 2019,
     coverImage:
-      "https://lnhlam.art/images/pthumbnail3.jpg",
+      "https://lnhlam.github.io/images/pthumbnail3.jpg",
     characterArt:
-      "https://lnhlam.art/images/charC.png",
+      "https://lnhlam.github.io/images/charC.png",
     images: [
       "https://www.youtube.com/watch?v=ur-kUYaU-U4",
-      "https://lnhlam.art/images/portfolio/portfolio5/pbig50.jpg",
-      "https://lnhlam.art/images/portfolio/portfolio5/pbig5.png",
-      "https://lnhlam.art/images/portfolio/portfolio5/pbig51.png",
-      "https://lnhlam.art/images/portfolio/portfolio5/pbig52.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio5/pbig50.jpg",
+      "https://lnhlam.github.io/images/portfolio/portfolio5/pbig5.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio5/pbig51.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio5/pbig52.png",
     ],
     description:
       "Ninja Chowdown is a pixel based mobile application featuring a ninja rushing through the streets in pursuit of the legendary Knownut. The game is an automatic side scrolling runner where the player must dodge obstacles, eat donuts, and defeat anything in their path.\n\nRole: Pixel Art, Marketing Art, Graphic Design, Motion Graphics",
@@ -373,15 +401,15 @@ const GAME_PROJECTS = [
     subtitle: "Pixel Art & Animation | Unity, Asesprite",
     year: 2020,
     coverImage:
-      "https://lnhlam.art/images/pthumbnail2.jpg",
+      "https://lnhlam.github.io/images/pthumbnail2.jpg",
     characterArt:
-      "https://lnhlam.art/images/charE.png",
+      "https://lnhlam.github.io/images/charE.png",
     images: [
       "https://www.youtube.com/watch?v=lfxmCq_mEmg",
-      "https://lnhlam.art/images/portfolio/portfolio2/pbig2.png",
-      "https://lnhlam.art/images/portfolio/portfolio2/pbig22.png",
-      "https://lnhlam.art/images/portfolio/portfolio2/pbig23.gif",
-      "https://lnhlam.art/images/portfolio/portfolio2/pbig24.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio2/pbig2.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio2/pbig22.png",
+      "https://lnhlam.github.io/images/portfolio/portfolio2/pbig23.gif",
+      "https://lnhlam.github.io/images/portfolio/portfolio2/pbig24.png",
     ],
     description:
       "Turtle Daddy is a pixel-based video game featuring an enthusiastic 'Turtle Daddy' commando who travels across several beaches and saves baby turtles from the dangers of the shorelines on their trek from birth to sea.\n\nRole: Art, Animation, Marketing Art, and Graphic Design",
@@ -1038,14 +1066,14 @@ const COLUMNS: {
     sub: "Design",
     number: "01",
     //image: "",
-    video: "https://lnhlam.art/video/Motion-Graphics-Reel-2026.mp4",
+    video: "https://lnhlam.github.io/video/Motion-Graphics-Reel-2026.mp4",
   },
   {
     id: "illustration",
     label: "Illustration",
     sub: "Art Direction",
     number: "02",
-    image: "https://lnhlam.art/images/coverArt1.png",
+    image: "https://lnhlam.github.io/images/coverArt1.png",
     // video: "/your-illustration-bg.mp4",
   },
   {
@@ -1054,7 +1082,7 @@ const COLUMNS: {
     sub: "Game Art",
     number: "03",
     //image: "",
-    video: "https://lnhlam.art/video/Smolbound.mp4",
+    video: "https://lnhlam.github.io/video/Smolbound.mp4",
   },
 ];
 
@@ -2677,16 +2705,38 @@ function GameArtPage() {
 
 // ─── App ───────────────────────────────────────────────────────────────────────
 
-export default function App() {
-  const [page, setPage] = useState<Page>("home");
+const PATH_TO_PAGE: Record<string, Page> = {
+  "/": "home",
+  "/motion": "motion",
+  "/illustration": "illustration",
+  "/gameart": "gameart",
+};
+
+const PAGE_TO_PATH: Record<Page, string> = {
+  home: "/",
+  motion: "/motion",
+  illustration: "/illustration",
+  gameart: "/gameart",
+};
+
+function AppContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [aboutOpen, setAboutOpen] = useState(false);
+
+  const page: Page = PATH_TO_PAGE[location.pathname] ?? "home";
+
+  const goTo = (p: Page) => {
+    navigate(PAGE_TO_PATH[p]);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <>
       {/* Global scroll-aware header — present on every page */}
       <GlobalHeader
         page={page}
-        onBack={() => setPage("home")}
+        onBack={() => goTo("home")}
         aboutOpen={aboutOpen}
         onToggleAbout={() => setAboutOpen((o) => !o)}
       />
@@ -2704,10 +2754,18 @@ export default function App() {
         </>
       )}
 
-      {page === "home" && <LandingPage onNavigate={setPage} />}
+      {page === "home" && <LandingPage onNavigate={goTo} />}
       {page === "motion" && <MotionPage />}
       {page === "illustration" && <IllustrationPage />}
       {page === "gameart" && <GameArtPage />}
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <HashRouter>
+      <AppContent />
+    </HashRouter>
   );
 }
